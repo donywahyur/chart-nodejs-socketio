@@ -1,0 +1,19 @@
+{
+  "name": "realtime-chart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "express-ejs-layouts": "^2.5.1",
+    "json-groupby": "^1.1.0",
+    "nodemon": "^2.0.16",
+    "socket.io": "^4.5.1"
+  }
+}
