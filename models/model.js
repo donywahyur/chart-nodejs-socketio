@@ -27,10 +27,11 @@ const simpanData = (nama, jk) => {
     const filteredData = data.filter((d) => d.nama.toLowerCase() !== nama.toLowerCase());
     filteredData.push(body);
     fs.writeFileSync("data/data.json", JSON.stringify(filteredData));
+    return 1;
   } else {
     data.push(body);
     fs.writeFileSync("data/data.json", JSON.stringify(data));
+    return 2;
   }
-  return true;
 };
 module.exports = { getData, simpanData };

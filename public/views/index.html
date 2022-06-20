@@ -14,6 +14,7 @@
         height: 400px;
       }
     </style>
+    <title>Chart</title>
   </head>
   <body>
     <center>
@@ -40,6 +41,13 @@
           </div>
         </div>
       </form>
+      <br />
+      <div class="row" style="width: 700px">
+        <div class="card" style="width: 100%">
+          <div class="card-header">Log</div>
+          <div class="card-body" id="scrollView" style="height: 200px; overflow-y: auto"></div>
+        </div>
+      </div>
     </center>
 
     <!-- Optional JavaScript -->
@@ -51,8 +59,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 
     <script>
-      // listen to input data
-
       // Setting socket
       const socket = io();
       socket.emit("join");
@@ -70,13 +76,17 @@
           data.datasets[0].data[1] = p;
         }
         myChart.update();
-        // console.log(JSON.parse(response));
-        // for (const key in response) {
-        //   console.log("Key : " + key + ", Value : " + response[key]);
-        //   console.log(response[key]["nama"].length);
-        // }
       });
-
+      socket.on("update-log", (response) => {
+        $("#scrollView").append(`
+            <ul class="list-unstyled mb-1">
+              <li class="p-2 border-bottom" style="background-color: #eee">
+                <p class="small text-muted">${response.nama} ${response.simpan === 1 ? "mengubah" : "mengisi"} jenis kelamin ${response.jk === "l" ? "Laki-Laki" : "Perempuan"}</p>
+              </li>
+            </ul>`);
+        scrollSmoothToBottom("scrollView");
+      });
+      // listen to input data
       $("#formInput").submit((e) => {
         e.preventDefault();
         const nama = $("#nama").val();
@@ -84,13 +94,14 @@
 
         socket.emit("input", { nama: `${nama}`, jk: `${jk}` });
       });
+
       let data = {
         labels: ["Laki-laki", "Perempuan"],
         datasets: [
           {
             label: ["# of Votes"],
             data: [],
-            backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
+            backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)"],
           },
         ],
       };
@@ -102,6 +113,15 @@
           animateScale: true,
         },
       });
+
+      //auto scroll to bottom
+      $(document).ready(() => {
+        scrollSmoothToBottom("scrollView");
+      });
+      function scrollSmoothToBottom(id) {
+        var div = document.getElementById(id);
+        div.scrollTop = div.scrollHeight - div.clientHeight;
+      }
     </script>
   </body>
 </html>

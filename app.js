@@ -30,8 +30,9 @@ io.on("connection", (socket) => {
     const group = groupBy(data, ["jk"], ["nama"]);
     io.emit("data", group);
   });
-  socket.on("input", (param) => {
-    model.simpanData(param.nama, param.jk);
+  socket.on("input", async (param) => {
+    const simpan = await model.simpanData(param.nama, param.jk);
+    io.emit("update-log", { nama: param.nama, jk: param.jk, simpan: simpan });
     const data = model.getData();
     const group = groupBy(data, ["jk"], ["nama"]);
     io.emit("data", group);
