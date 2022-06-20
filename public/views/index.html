@@ -23,6 +23,23 @@
       <div class="vote-result-wrapper">
         <canvas id="vote-result"></canvas>
       </div>
+      <form action="" id="formInput">
+        <div class="row" style="width: 700px">
+          <div class="col-md-5">
+            <input type="text" class="form-control" name="" id="nama" required placeholder="Nama" />
+          </div>
+          <div class="col-md-5">
+            <select name="" id="jk" class="form-control" required>
+              <option value="" selected disabled>Pilih Jenis Kelamin</option>
+              <option value="l">Laki-laki</option>
+              <option value="p">Perempuan</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <input type="submit" value="Simpan" />
+          </div>
+        </div>
+      </form>
     </center>
 
     <!-- Optional JavaScript -->
@@ -34,10 +51,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
 
     <script>
+      // listen to input data
+
       // Setting socket
       const socket = io();
+      socket.emit("join");
+
       let myChart;
       let i = 1;
+
       socket.on("data", (response) => {
         if (response.l) {
           let l = response.l.nama.length;
@@ -55,6 +77,13 @@
         // }
       });
 
+      $("#formInput").submit((e) => {
+        e.preventDefault();
+        const nama = $("#nama").val();
+        const jk = $("#jk").val();
+
+        socket.emit("input", { nama: `${nama}`, jk: `${jk}` });
+      });
       let data = {
         labels: ["Laki-laki", "Perempuan"],
         datasets: [

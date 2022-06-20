@@ -39,9 +39,17 @@ app.get("/data", function (req, res) {
 
 //setup socket
 io.on("connection", (socket) => {
-  const data = model.getData();
-  const group = groupBy(data, ["jk"], ["nama"]);
-  socket.emit("data", group);
+  socket.on("join", () => {
+    const data = model.getData();
+    const group = groupBy(data, ["jk"], ["nama"]);
+    io.emit("data", group);
+  });
+  socket.on("input", (param) => {
+    model.simpanData(param.nama, param.jk);
+    const data = model.getData();
+    const group = groupBy(data, ["jk"], ["nama"]);
+    io.emit("data", group);
+  });
 });
 
 server.listen(port);
