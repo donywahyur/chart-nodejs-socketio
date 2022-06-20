@@ -16,20 +16,6 @@ app.get("/", (req, res) => {
   res.sendFile("public/views/index.html", { root: __dirname });
 });
 
-//use this in postman
-app.post("/input", (req, res) => {
-  //save data
-  const body = req.body;
-  model.simpanData(body.nama, body.jk);
-
-  //load data
-  const data = model.getData();
-  const group = groupBy(data, ["jk"], ["nama"]);
-  //   req.io.emit("data", group);
-
-  res.json({ message: "success" });
-});
-
 //just for test
 app.get("/data", function (req, res) {
   const data = model.getData();
